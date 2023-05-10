@@ -1,0 +1,49 @@
+map-view-options {
+  position: absolute;
+  bottom: 80px;
+  right: 0px;
+  max-height: 90%;
+  overflow-y: auto;
+  margin: 5px;
+  color: white;
+  z-index: 999;
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.map-view-options .map-view-option {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 12px;
+  cursor: pointer;
+  filter: drop-shadow(3px 3px 3px #333)
+}
+
+.map-view-options .map-view-option:hover {
+  opacity: 0.8;
+}
+
+.map-view-options .map-view-option .map-view-option-label {
+  background-color: black;
+  padding: 1px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.map-view-options .map-view-option .map-view-option-icon-wrapper {
+  height: 40px;
+  min-height: 40px;
+  width: 40px;
+  min-width: 40px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.map-view-options .map-view-option .map-view-option-icon {
+  margin: 10px;
+}
