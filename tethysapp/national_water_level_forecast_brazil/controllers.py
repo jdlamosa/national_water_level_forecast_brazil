@@ -28,7 +28,9 @@ from django.http import HttpResponse, JsonResponse
 from .app import NationalWaterLevelForecastBrazil as app
 
 from .model import Stations_manage as stations
+from tethys_sdk.routing import controller
 
+@controller(name='home', url='national-water-level-forecast-brazil')
 def home(request):
     """
     Controller for the app home page.
@@ -138,6 +140,7 @@ def home(request):
 
     return render(request, 'national_water_level_forecast_brazil/home.html', context)
 
+@controller(name='get_popup_response', url='national-water-level-forecast-brazil/get-request-data')
 def get_popup_response(request):
     """
     get station attributes
@@ -278,6 +281,8 @@ def get_popup_response(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+
+@controller(name='get_hydrographs', url='national-water-level-forecast-brazil/get-hydrographs')
 def get_hydrographs(request):
     """
     Get observed data from csv files in Hydroshare
@@ -356,6 +361,7 @@ def get_hydrographs(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_dailyAverages', url='national-water-level-forecast-brazil/get-dailyAverages')
 def get_dailyAverages(request):
     """
     Get observed data from csv files in Hydroshare
@@ -420,6 +426,7 @@ def get_dailyAverages(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_monthlyAverages', url='national-water-level-forecast-brazil/get-monthlyAverages')
 def get_monthlyAverages(request):
     """
     Get observed data from csv files in Hydroshare
@@ -485,6 +492,7 @@ def get_monthlyAverages(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_scatterPlot', url='national-water-level-forecast-brazil/get-scatterPlot')
 def get_scatterPlot(request):
     """
     Get observed data from csv files in Hydroshare
@@ -572,6 +580,7 @@ def get_scatterPlot(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_scatterPlotLogScale', url='national-water-level-forecast-brazil/get-scatterPlotLogScale')
 def get_scatterPlotLogScale(request):
     """
     Get observed data from csv files in Hydroshare
@@ -647,7 +656,7 @@ def get_scatterPlotLogScale(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
-
+@controller(name='make_table_ajax', url='national-water-level-forecast-brazil/make-table-ajax')
 def make_table_ajax(request):
 
     start_time = time.time()
@@ -772,6 +781,8 @@ def make_table_ajax(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+
+@controller(name='get-time-series-bc', url='national-water-level-forecast-brazil/get-time-series-bc')
 def get_time_series_bc(request):
 
     start_time = time.time()
@@ -1195,6 +1206,7 @@ def get_time_series_bc(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get-available-dates', url='national-water-level-forecast-brazil/ecmwf-rapid/get-available-dates')
 def get_available_dates(request):
     get_data = request.GET
     watershed = get_data['watershed']
@@ -1226,6 +1238,7 @@ def get_available_dates(request):
         "available_dates": json.dumps(dates)
     })
 
+@controller(name='get_observed_water_level_csv', url='national-water-level-forecast-brazil/get-observed-water-level-csv')
 def get_observed_water_level_csv(request):
     """
     Get observed data from csv files in Hydroshare
@@ -1270,6 +1283,7 @@ def get_observed_water_level_csv(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_simulated_bc_water_level_csv', url='national-water-level-forecast-brazil/get-simulated-bc-water-level-csv')
 def get_simulated_bc_water_level_csv(request):
     """
     Get historic simulations from ERA Interim
@@ -1305,6 +1319,7 @@ def get_simulated_bc_water_level_csv(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+@controller(name='get_forecast_bc_data_csv', url='national-water-level-forecast-brazil/get-forecast-bc-data-csv')
 def get_forecast_bc_data_csv(request):
     """""
     Returns Forecast data as csv
@@ -1339,6 +1354,8 @@ def get_forecast_bc_data_csv(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
+
+@controller(name='get_forecast_ensemble_bc_data_csv', url='national-water-level-forecast-brazil/get-forecast-ensemble-bc-data-csv')
 def get_forecast_ensemble_bc_data_csv(request):
     """""
     Returns Forecast data as csv
@@ -1376,7 +1393,8 @@ def get_forecast_ensemble_bc_data_csv(request):
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
 
-############################################################
+
+@controller(name='get_zoom_array', url='national-water-level-forecast-brazil/get-zoom-array')
 def get_zoom_array(request):
     zoom_description = request.GET['zoom_desc']
 
@@ -1404,5 +1422,3 @@ def get_zoom_array(request):
         return JsonResponse({
             'error': f'{"error: " + str(e), "line: " + str(exc_tb.tb_lineno)}',
         })
-
-############################################################

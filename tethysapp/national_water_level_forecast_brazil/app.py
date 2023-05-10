@@ -7,7 +7,7 @@ class NationalWaterLevelForecastBrazil(TethysAppBase):
     """
 
     name = 'National Water Level Forecast Brazil'
-    index = 'national_water_level_forecast_brazil:home'
+    index = 'home'
     icon = 'national_water_level_forecast_brazil/images/national_water_level_forecast_brazil.jpeg'
     package = 'national_water_level_forecast_brazil'
     root_url = 'national-water-level-forecast-brazil'
@@ -16,6 +16,7 @@ class NationalWaterLevelForecastBrazil(TethysAppBase):
     tags = '"Hydrology", "Time Series", "Bias Correction", "Hydrostats", "GEOGloWS", "Water Level", "Brazil"'
     enable_feedback = False
     feedback_emails = []
+    controller_modules = [ "controllers" ]
 
     def spatial_dataset_service_settings(self):
         """
@@ -30,95 +31,95 @@ class NationalWaterLevelForecastBrazil(TethysAppBase):
             ),
         )
 
-    def url_maps(self):
-        """
-        Add controllers
-        """
-        UrlMap = url_map_maker(self.root_url)
+    # def url_maps(self):
+    #     """
+    #     Add controllers
+    #     """
+    #     UrlMap = url_map_maker(self.root_url)
 
-        url_maps = (
-            UrlMap(
-                name='home',
-                url='national-water-level-forecast-brazil',
-                controller='national_water_level_forecast_brazil.controllers.home'
-            ),
-            UrlMap(
-                name='get_popup_response',
-                url='get-request-data',
-                controller='national_water_level_forecast_brazil.controllers.get_popup_response'
-            ),
-            UrlMap(
-                name='get_hydrographs',
-                url='get-hydrographs',
-                controller='national_water_level_forecast_brazil.controllers.get_hydrographs'
-            ),
-            UrlMap(
-                name='get_dailyAverages',
-                url='get-dailyAverages',
-                controller='national_water_level_forecast_brazil.controllers.get_dailyAverages'
-            ),
-            UrlMap(
-                name='get_monthlyAverages',
-                url='get-monthlyAverages',
-                controller='national_water_level_forecast_brazil.controllers.get_monthlyAverages'
-            ),
-            UrlMap(
-                name='get_scatterPlot',
-                url='get-scatterPlot',
-                controller='national_water_level_forecast_brazil.controllers.get_scatterPlot'
-            ),
-            UrlMap(
-                name='get_scatterPlotLogScale',
-                url='get-scatterPlotLogScale',
-                controller='national_water_level_forecast_brazil.controllers.get_scatterPlotLogScale'
-            ),
-            UrlMap(
-                name='make_table_ajax',
-                url='make-table-ajax',
-                controller='national_water_level_forecast_brazil.controllers.make_table_ajax'
-            ),
-            UrlMap(
-                name='get-available-dates',
-                url='ecmwf-rapid/get-available-dates',
-                controller='national_water_level_forecast_brazil.controllers.get_available_dates'
-            ),
-            UrlMap(
-                name='get-time-series-bc',
-                url='get-time-series-bc',
-                controller='national_water_level_forecast_brazil.controllers.get_time_series_bc'
-            ),
-            UrlMap(
-                name='get_observed_water_level_csv',
-                url='get-observed-water-level-csv',
-                controller='national_water_level_forecast_brazil.controllers.get_observed_water_level_csv'
-            ),
-            UrlMap(
-                name='get_simulated_bc_water_level_csv',
-                url='get-simulated-bc-water-level-csv',
-                controller='national_water_level_forecast_brazil.controllers.get_simulated_bc_water_level_csv'
-            ),
-            UrlMap(
-                name='get_forecast_bc_data_csv',
-                url='get-forecast-bc-data-csv',
-                controller='national_water_level_forecast_brazil.controllers.get_forecast_bc_data_csv'
-            ),
-            UrlMap(
-                name='get_forecast_ensemble_bc_data_csv',
-                url='get-forecast-ensemble-bc-data-csv',
-                controller='national_water_level_forecast_brazil.controllers.get_forecast_ensemble_bc_data_csv'
-            ),
-            ########################################
-            ########################################
-            UrlMap(
-                name="get_zoom_array",
-                url="get-zoom-array",
-                controller="national_water_level_forecast_brazil.controllers.get_zoom_array",
-            ),
-            ########################################
-            ########################################
-        )
+    #     url_maps = (
+    #         UrlMap(
+    #             name='home',
+    #             url='national-water-level-forecast-brazil',
+    #             controller='national_water_level_forecast_brazil.controllers.home'
+    #         ),
+    #         UrlMap(
+    #             name='get_popup_response',
+    #             url='get-request-data',
+    #             controller='national_water_level_forecast_brazil.controllers.get_popup_response'
+    #         ),
+    #         UrlMap(
+    #             name='get_hydrographs',
+    #             url='get-hydrographs',
+    #             controller='national_water_level_forecast_brazil.controllers.get_hydrographs'
+    #         ),
+    #         UrlMap(
+    #             name='get_dailyAverages',
+    #             url='get-dailyAverages',
+    #             controller='national_water_level_forecast_brazil.controllers.get_dailyAverages'
+    #         ),
+    #         UrlMap(
+    #             name='get_monthlyAverages',
+    #             url='get-monthlyAverages',
+    #             controller='national_water_level_forecast_brazil.controllers.get_monthlyAverages'
+    #         ),
+    #         UrlMap(
+    #             name='get_scatterPlot',
+    #             url='get-scatterPlot',
+    #             controller='national_water_level_forecast_brazil.controllers.get_scatterPlot'
+    #         ),
+    #         UrlMap(
+    #             name='get_scatterPlotLogScale',
+    #             url='get-scatterPlotLogScale',
+    #             controller='national_water_level_forecast_brazil.controllers.get_scatterPlotLogScale'
+    #         ),
+    #         UrlMap(
+    #             name='make_table_ajax',
+    #             url='make-table-ajax',
+    #             controller='national_water_level_forecast_brazil.controllers.make_table_ajax'
+    #         ),
+    #         UrlMap(
+    #             name='get-available-dates',
+    #             url='ecmwf-rapid/get-available-dates',
+    #             controller='national_water_level_forecast_brazil.controllers.get_available_dates'
+    #         ),
+    #         UrlMap(
+    #             name='get-time-series-bc',
+    #             url='get-time-series-bc',
+    #             controller='national_water_level_forecast_brazil.controllers.get_time_series_bc'
+    #         ),
+    #         UrlMap(
+    #             name='get_observed_water_level_csv',
+    #             url='get-observed-water-level-csv',
+    #             controller='national_water_level_forecast_brazil.controllers.get_observed_water_level_csv'
+    #         ),
+    #         UrlMap(
+    #             name='get_simulated_bc_water_level_csv',
+    #             url='get-simulated-bc-water-level-csv',
+    #             controller='national_water_level_forecast_brazil.controllers.get_simulated_bc_water_level_csv'
+    #         ),
+    #         UrlMap(
+    #             name='get_forecast_bc_data_csv',
+    #             url='get-forecast-bc-data-csv',
+    #             controller='national_water_level_forecast_brazil.controllers.get_forecast_bc_data_csv'
+    #         ),
+    #         UrlMap(
+    #             name='get_forecast_ensemble_bc_data_csv',
+    #             url='get-forecast-ensemble-bc-data-csv',
+    #             controller='national_water_level_forecast_brazil.controllers.get_forecast_ensemble_bc_data_csv'
+    #         ),
+    #         ########################################
+    #         ########################################
+    #         UrlMap(
+    #             name="get_zoom_array",
+    #             url="get-zoom-array",
+    #             controller="national_water_level_forecast_brazil.controllers.get_zoom_array",
+    #         ),
+    #         ########################################
+    #         ########################################
+    #     )
 
-        return url_maps
+    #     return url_maps
 
     def custom_settings(self):
         return (
