@@ -137,6 +137,12 @@ const regionsStyle = () => {
             layer: wmsLayer2,
             isOn: true,
         },
+        streams: {
+            icon: '<svg width="20" height="20" viewPort="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"><polyline points="0 10, 0 0, 10 0, 10 10, 0 10" stroke="rgba(255,0,0,1)" fill="rgba(255,0,0,1)" stroke-width="2"/></svg>',
+            name: 'Streams',
+            layer: wmsLayer,
+            isOn: true,
+        },
     };
 
     const parent = $('#hydrology .modal-body');
