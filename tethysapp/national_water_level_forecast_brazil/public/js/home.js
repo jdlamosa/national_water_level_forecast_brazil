@@ -1,3 +1,33 @@
+/* Global Variables */
+var default_extent,
+    current_layer,
+    current_feature,
+    feature_layer,
+    stream_geom,
+    layers,
+    wmsLayer,
+    wmsLayer2,
+    vectorLayer,
+    feature,
+    featureOverlay,
+    forecastFolder,
+    select_interaction,
+    two_year_warning,
+    five_year_warning,
+    ten_year_warning,
+    twenty_five_year_warning,
+    fifty_year_warning,
+    hundred_year_warning,
+    map,
+    wms_layers;
+ 
+const wmsWorkspace = 'HS-11765271903a45d483416ce57bf8c710';
+const glofasURL = `http://globalfloods-ows.ecmwf.int/glofas-ows/ows.py`
+const observedLayers = [];
+
+
+const DEFAULT_COLOR = 'rgba(106, 102, 110,1)';
+
 // Getting the csrf token
 function get_requestData (watershed, subbasin, streamcomid, stationcode, stationname, startdate){
   getdata = {
@@ -49,12 +79,6 @@ $.ajaxSetup({
         }
     }
 });
-
-var feature_layer;
-var current_layer;
-var map;
-var wmsLayer;
-var wmsLayer2;
 
 let $loading = $('#view-file-loading');
 var m_downloaded_historical_streamflow = false;
@@ -747,6 +771,107 @@ function getSubBasinGeoJsons() {
     }
  }
 
+ //test
+ function turnOffLayerGroup(map, layerGroup, except) {
+    const layers = map.getLayers().getArray();
+
+    for (let layer of layers) {
+        if (layer.get('group') === layerGroup) {
+            layer.setVisible(false);
+
+            observedLayers
+                .filter(({ group, layer }) => {
+                    return group === layerGroup
+                        && (except ? layer !== except : true);
+                })
+                .forEach((observed) => observed.isOn = false);
+        }
+    }
+}
+
+function removeLayer(map, layerName) {
+    const layers = map.getLayers().getArray();
+
+    for (let layer of layers) {
+        if (layer.get('name') === layerName) {
+            map.removeLayer(layer);
+            break;
+        }
+    }
+}
+
+function zoomToLayer(layer) {
+    if (layer.getVisible() === false) { return; }
+
+    setTimeout(() => {
+        const myExtent = layer.getSource().getExtent();
+        map.getView().fit(myExtent, map.getSize());
+    }, 10);
+}
+
+function createGeojsonsLayer(options) {
+    const {
+        staticGeoJson,
+        geojsons,
+        layerName,
+        group,
+        visible = true,
+        style,
+    } = options;
+
+    for (let i in geojsons) {
+        var regionsSource = new ol.source.Vector({
+           url: staticGeoJson + geojsons[i],
+           format: new ol.format.GeoJSON()
+        });
+
+        var regionsLayer = new ol.layer.Vector({
+            group,
+            name: layerName || 'myRegion',
+            source: regionsSource,
+            style,
+            visible,
+        });
+
+        map.addLayer(regionsLayer)
+
+        setTimeout(() => zoomToLayer(regionsLayer), 500);
+
+        return regionsLayer;
+    }
+}
+
+function activateGeojsons(geojsons, layerName, group) {
+    for (let i in geojsons) {
+        var regionsSource = new ol.source.Vector({
+           url: staticGeoJSON + geojsons[i],
+           format: new ol.format.GeoJSON()
+        });
+
+        var featureStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#009C3B',
+                width: 3
+            })
+        });
+
+        var regionsLayer = new ol.layer.Vector({
+            group,
+            name: layerName || 'myRegion',
+            source: regionsSource,
+            style: featureStyle,
+        });
+
+        removeLayer(map, layerName || 'myRegion');
+        map.addLayer(regionsLayer)
+
+        setTimeout(function() {
+            var myExtent = regionsLayer.getSource().getExtent();
+            map.getView().fit(myExtent, map.getSize());
+        }, 500);
+    }
+}
+
 // Regions gizmo listener
 $('#basins').change(function() {getBasinGeoJsons()});
 $('#subbasins').change(function() {getSubBasinGeoJsons()});
@@ -828,7 +953,7 @@ function search_func () {
                         radius: 7,
                         fill: new ol.style.Fill({ color: 'rgba(0, 0, 0, 0)' }),
                         stroke: new ol.style.Stroke({
-                            color: 'rgba(0, 0, 0, 1)',
+                            color: DEFAULT_COLOR,
                             width: 2
                         })
                     })
@@ -956,13 +1081,13 @@ function search_func () {
 
 }
 
-function show_list_stations () {
-     $("#list-search-container").removeClass('hidden');
-}
+// function show_list_stations () {
+    //  $("#list-search-container").removeClass('hidden');
+// }
 
 $("#list-search-container").addClass('hidden');
-document.getElementById("search-txt").onclick = function () { show_list_stations() };
-document.getElementById("search-btn").onclick = function () { search_func() };
+// document.getElementById("search-txt").onclick = function () { show_list_stations() };
+// document.getElementById("search-btn").onclick = function () { search_func() };
 
 
 // ############################################################

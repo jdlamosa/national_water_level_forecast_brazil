@@ -5,7 +5,29 @@
 {% import_gizmo_dependency plotly_view %} 
 {% endblock %} 
 {% block app_content %}
+
+{% block styles %}
+  {{ block.super }}
+  <link href="{% static 'national_water_level_forecast_brazil/css/map.css' %}" rel="stylesheet"/>
+  <link href="{% static 'national_water_level_forecast_brazil/css/toggle-switchy.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'national_water_level_forecast_brazil/js/map.js' %}" type="text/javascript"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+{% endblock %}
+
+
 <div id="map" class="map">
+  <div id="map-view-options" class="map-view-options">
+    <div class="map-view-option" data-bs-toggle="modal" data-bs-target="#hydrology">
+      <div class="map-view-option-label">Hydrology</div>
+      <div class="map-view-option-icon-wrapper">
+        <svg class="map-view-option-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M269.5 69.9c11.1-7.9 25.9-7.9 37 0C329 85.4 356.5 96 384 96c26.9 0 55.4-10.8 77.4-26.1l0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 149.7 417 160 384 160c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4C42.8 92.6 61 83.5 75.3 71.6c11.1-9.5 27.3-10.1 39.2-1.7l0 0C136.7 85.2 165.1 96 192 96c27.5 0 55-10.6 77.5-26.1zm37 288C329 373.4 356.5 384 384 384c26.9 0 55.4-10.8 77.4-26.1l0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 437.7 417 448 384 448c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2c11.1-9.4 27.3-10.1 39.2-1.7l0 0C136.7 373.2 165.1 384 192 384c27.5 0 55-10.6 77.5-26.1c11.1-7.9 25.9-7.9 37 0zm0-144C329 229.4 356.5 240 384 240c26.9 0 55.4-10.8 77.4-26.1l0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 293.7 417 304 384 304c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2c11.1-9.5 27.3-10.1 39.2-1.7l0 0C136.7 229.2 165.1 240 192 240c27.5 0 55-10.6 77.5-26.1c11.1-7.9 25.9-7.9 37 0z"/></svg>  
+      </div>
+    </div>
+  </div>
   <div id="map-view-legend" class="map-view-legend ol-unselectable ol-control">
     <div>
       <svg
@@ -40,22 +62,7 @@
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <polyline
-          points="0 10, 0 0, 10 0, 10 10, 0 10"
-          stroke="rgba(255,0,0,1)"
-          fill="rgba(255,0,0,1)"
-          stroke-width="2"
-        />
       </svg>
-      Stations
-      <input
-        id="stp-stations-toggle"
-        class="toggle-layer"
-        type="checkbox"
-        checked
-        data-bs-toggle="toggle"
-        data-size="mini"
-      />
     </div>
     <div>
       <br />
@@ -522,6 +529,42 @@
     </div>
   </div>
 </div>
+
+<!-- Hydrology Modal -->
+<div class="modal fade" id="hydrology" tabindex="-1" role="dialog" aria-labelledby="about-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="about-modal-label">Hydrology</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Content create by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Layers Modal -->
+<div class="layers-panel" id="layers-panel" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="about-modal-label">Layers</h2>
+      </div>
+      <div class="modal-body">
+        <div id="layers-panel-empty">
+          No layers
+        </div>
+        <div id="observed-layers"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- About Modal -->
 <div
   class="modal fade"
