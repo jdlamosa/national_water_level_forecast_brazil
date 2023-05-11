@@ -361,6 +361,76 @@ const regionsStyle = () => {
     });
  };
 
+ const buildRegions3 = () => {
+    if (typeof region_index3 === 'undefined') {
+        setTimeout(buildRegions3, 50);
+        return;
+    }
+
+    const parent = $('#region3 .modal-body');
+  
+    Object.keys(region_index3).forEach((key) => {
+        const index = region_index3[key];
+        const option = document.createElement('div');
+        const title = document.createElement('div');
+        const toggle = document.createElement('div');
+        toggle.classList.add('region3-toggle')
+        toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg>';
+  
+        option.classList.add('region3-option-wrapper');
+        title.classList.add('region3-option-label');
+        title.textContent = index.name;
+  
+        const observe = (isOn) => {
+            let layer = index.layer;
+
+            if (!layer) {
+                const geojsons = index.geojsons;
+                layer = createGeojsonsLayer({
+                    staticGeoJson: staticGeoJSON3,
+                    geojsons,
+                    layerName: key,
+                    group: REGIONS_GROUP,
+                    style: regionsStyle,
+                });
+
+                // Caching
+                region_index3[key].layer = layer;
+            }
+
+            observeLayer({
+                key,
+                isOn,
+                layer,
+                name: index.name,
+                group: REGIONS_GROUP,
+                onToggle: (isActive) => {
+                    if (isActive) {
+                        turnOffLayerGroup(map, REGIONS_GROUP, layer);
+                    }
+    
+                    layer.setVisible(isActive);
+                    zoomToLayer(layer);
+                },
+                onRemove: () => {
+                    $(toggle).find('input').prop('checked', false);
+                    index.layer.setVisible(false);
+                },
+            });
+
+            layer.setVisible(true);
+            setTimeout(() => zoomToLayer(layer), 500);
+        };
+
+        $(option).append(title, toggle);
+        $(parent).append(option);
+        $(toggle).click(() => {
+            turnOffLayerGroup(map, REGIONS_GROUP);
+            observe(true);
+        });
+    });
+ };
+
 
  const disableOvservedLayerGroup = (group, except) => {
     if (!group) { return; }
@@ -553,8 +623,10 @@ const regionsStyle = () => {
     $('#hydrology .modal-dialog').draggable();
     $('#region .modal-dialog').draggable();
     $('#region2 .modal-dialog').draggable();
+    $('#region3 .modal-dialog').draggable();
     $('#layers-panel').draggable();
     buildHydrology();
     buildRegions();
     buildRegions2();
+    buildRegions3();
  });
