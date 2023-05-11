@@ -1,4 +1,4 @@
-let ottobacias_index = {
+ottobacias_index = {
 	  'level_1': {
 			'name': 'Ottobacia L1',
 			'geojsons': ['ottobacias_nivel1.json']

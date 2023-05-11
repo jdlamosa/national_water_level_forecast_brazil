@@ -1,4 +1,4 @@
-let region_index2 = {
+region_index2 = {
 	  "brazil": {
         "name": "Brazil",
         "geojsons": ["Brazil.json"]
