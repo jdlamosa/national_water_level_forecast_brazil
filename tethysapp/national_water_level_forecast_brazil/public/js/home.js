@@ -27,6 +27,7 @@ const observedLayers = [];
 
 
 const DEFAULT_COLOR = 'rgba(106, 102, 110,1)';
+const REGION_COLOR = 'rgba(0,100,0,1)';
 
 // Getting the csrf token
 function get_requestData (watershed, subbasin, streamcomid, stationcode, stationname, startdate){
